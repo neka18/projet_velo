@@ -1,0 +1,86 @@
+{% extends 'layouts/adverts.html.twig' %}
+{% form_theme commentForm 'bootstrap_4_layout.html.twig' %}
+{% block content %}
+    <div class="all-title-box" style="background: url('{{ asset('uploads/'~advert.gallery.photos[0].url) }}');}}">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>{{ advert.title }}</h2>
+                    <!-- Breadcrumbs -->
+                    <nav id="breadcrumbs">
+                        <ul>
+                            <li><a href="#">Home</a></li>
+                            <li>adverts</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="features" class="section wb">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="photos">
+                        <div class="post-media wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
+                            <a href="{{ asset('uploads/'~advert.gallery.photos[0].url) }}" data-rel="prettyPhoto[gal]"><img src="{{ asset('uploads/'~advert.gallery.photos[0].url) }}" alt="" class="img-responsive"></a>
+                        </div><!-- end media -->
+{#                    reste de la galerie#}
+                    {% for photo in advert.gallery.photos %}
+                        <div class="post-media wow fadeIn square" style="visibility: visible; animation-name: fadeIn;">
+                            <a href="{{ asset('uploads/'~photo.url) }}" data-rel="prettyPhoto[gal]"><img src="{{ asset('uploads/'~photo.url) }}" alt="" class="img-responsive"></a>
+                        </div>
+                    {% endfor %}
+                    <div class="clearfix"></div>
+                    </div>
+                    <div id="comments" class="mt-5">
+                        <h3>Commentaires</h3>
+                        {% for comment in advert.comments|filter(comment => comment.disabled == false) %}
+
+                            <div class="comment {% if advert.user == comment.author %}author{% endif %}">
+                                <div class="media-body">
+                                    <div class="well">
+                                        <div class="media-heading">
+                                            <span class="heading-font">{{ comment.author.email }}</span>&nbsp; <small>{{ comment.date |date("F jS \\a\\t g:ia")  }}</small>
+                                            <a href="{{ path('reportComment', {id: comment.id}) }}" class="flag"><i class="fa fa-flag"></i> </a>
+                                        </div>
+                                        <p>{{ comment.content }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endfor %}
+                        {% if app.user %}
+                        <div id="form">
+                            {{ form(commentForm) }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="message-box right-ab">
+                        <h4>{{ advert.category.name }}</h4>
+                        <h2>{{ advert.title }} {% if app.user == advert.user%} - <a href="{{ url('edit_advert', {id: advert.id}) }}">EDIT</a> {% else %}<small>{{ advert.user.email }}</small>{% endif %}</h2>
+                        <p>{{ advert.description }}</p>
+{#                        <a href="#" class="btn btn-light btn-radius grd1 btn-brd"> Read More </a>#}
+                        <dl>
+                            <dt>Année: </dt>
+                            <dd>{{ advert.bikeYear }}</dd>
+                            <dt>Prix: </dt>
+                            <dd>{{ advert.price }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+
+            {#            <div class="row">#}
+{#                <p>{{ advert.description }}</p>#}
+{#                <img src="{{ asset('uploads/'~advert.gallery.photos[0].url) }}" alt="" class="img-responsive">#}
+{#                <a class="btn btn-primary" href="{{ url('edit_advert', {'id': advert.id}) }}">EDIT</a>#}
+{#            </div>#}
+        </div>
+    </div>
+
+
+{% endblock content %}

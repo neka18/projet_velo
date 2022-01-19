@@ -1,0 +1,110 @@
+{% extends 'layouts/adverts.html.twig' %}
+
+{% block content %}
+    <div class="all-title-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Search</h2>
+                    <!-- Breadcrumbs -->
+                    <nav id="breadcrumbs">
+                        <ul>
+                            <li><a href="#">Home</a></li>
+                            <li>search</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="features" class="section wb">
+    <div class="container">
+    <div class="row">
+{{ form_start(advertForm) }}
+{{ form_row(advertForm.title) }}
+{{ form_row(advertForm.description) }}
+{{ form_row(advertForm.category) }}
+{{ form_row(advertForm.price) }}
+{{ form_row(advertForm.bikeYear) }}
+
+        {% for error in advertForm.gallery.vars.errors.form.getErrors(true) %}
+            <div class="alert">{{ error.message }}</div>
+        {% endfor %}
+        {{ form_label(advertForm.gallery) }}
+
+        <ul id="photo-gallery-list" class="collection-form"
+            data-prototype="{{ form_widget(advertForm.gallery.photos.vars.prototype)|e }}"
+            data-widget-tags="{{ '<li></li>'|e }}"
+            data-widget-counter="{{ advertForm.gallery.photos | length }}">
+            {% for photoField in advertForm.gallery.photos %}
+                <li class="existantPhotos">
+                    {# ici le .value me retourne l'entité liée au champ de formulaire (une entité Photo)#}
+                    <img src="{{ asset('uploads/'~photoField.vars.value.url) }}" alt="" width="100">
+                    {{ form_widget(photoField, {'attr': {'class': 'hidden'}}) }}
+                </li>
+            {% endfor %}
+        </ul>
+        <button type="button"
+                class="add-another-collection-widget btn btn-primary btn-sm"
+                data-list-selector="#photo-gallery-list">+</button>
+
+        {% do advertForm.gallery.setRendered %}
+
+
+    </div>
+    </div>
+    </div>
+
+{#    Fin Gallery#}
+{{ form_rest(advertForm) }}
+
+
+{% endblock content %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+
+            $($('.add-another-collection-widget').attr('data-list-selector'))
+                .find('.existantPhotos').append(createButton());
+
+            $('.add-another-collection-widget').click(function (e) {
+                var list = $($(this).attr('data-list-selector'));
+                // Try to find the counter of the list or use the length of the list
+                var counter = list.data('widget-counter') || list.children().length;
+
+                // grab the prototype template
+                var newWidget = list.attr('data-prototype');
+                // replace the "__name__" used in the id and name of the prototype
+                // with a number that's unique to your emails
+                // end name attribute looks like name="contact[emails][2]"
+                newWidget = newWidget.replace(/__name__/g, counter);
+                // Increase the counter
+                counter++;
+                // And store it, the length cannot be used if deleting widgets is allowed
+                list.data('widget-counter', counter);
+
+                // create a new list element and add it to the list
+                var newElem = $(list.attr('data-widget-tags')).html(newWidget);
+                var button = createButton();
+                newElem.find('input').after(button);
+
+                newElem.appendTo(list);
+            });
+
+
+        });
+
+        function createButton() {
+            var button = $('<button class="btn btn-danger removeElement" type="button">-</button>');
+            button.click(function(e) {
+                $(this).parents('li').remove();
+            });
+            return button;
+        }
+
+
+    </script>
+{% endblock javascripts %}

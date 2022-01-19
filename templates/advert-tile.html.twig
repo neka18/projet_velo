@@ -1,0 +1,42 @@
+<div class="col-md-4 col-sm-6 col-xs-12">
+    <div class="service-widget">
+        <div class="property-main">
+            <div class="property-wrap">
+                <figure class="post-media wow fadeIn">
+                    <a href="{{ url('view_advert', {slug: advert.slug}) }}" class="hoverbutton global-radius"></a>
+                    <img src="{{ asset('uploads/'~advert.gallery.photos[0].url) }}" alt="" class="img-responsive">
+                    <div class="label-inner">
+                        <span class="label-status label">{{ advert.category.name }}</span>
+                    </div>
+                    <div class="price">
+                        <span class="item-sub-price">{{ advert.price | price }}</span>
+                    </div>
+                </figure>
+                <div class="item-body">
+                    <h3>{{ advert.title }}</h3>
+                    <div class="info">
+                        <p>{{ advert.description }}</p>
+                    </div>
+{#                    <div class="adderess">#}
+{#                        <i class="fa fa-map-pin" aria-hidden="true"></i>#}
+{#                        334, Rock Hill, New York, Mississippi, 12775, USA#}
+{#                    </div>#}
+                </div>
+            </div>
+            <div class="item-foot">
+                <div class="pull-left">
+								<span class="prop-user-agent">
+									<i class="fa fa-user" aria-hidden="true"></i>
+									{{ advert.user.email }}
+								</span>
+                </div>
+                <div class="pull-right">
+								<span class="prop-date">
+									<i class="fa fa-calendar" aria-hidden="true"></i>
+									{{ advert.date | date("d-m-Y") }}
+								</span>
+                </div>
+            </div>
+        </div>
+    </div><!-- end service -->
+</div>

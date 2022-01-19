@@ -1,0 +1,33 @@
+{% extends "layouts/adverts.html.twig" %}
+
+{#{% block title %}Ceci est un titre{% endblock title %}#}
+
+{% block content %}
+
+<div id="features" class="section wb">
+    <div class="container">
+        <div class="section-title row text-center">
+            <div class="col-md-8 col-md-offset-2">
+
+                <h3>Dernières annonces</h3>
+                <p class="lead">Elles sont toutes fraiches</p>
+            </div><!-- end col -->
+        </div><!-- end title -->
+
+        <hr class="invis">
+
+
+        {% for advert in adverts%}
+            {% if loop.index0 % 3 == 0 %}
+                <div class="row">
+            {% endif %}
+            {% include 'advert-tile.html.twig' %}
+            {% if loop.index0 % 3 == 2 %}
+                </div>
+            {% endif %}
+        {% endfor%}
+
+    </div>
+</div>
+{% endblock %}
+
